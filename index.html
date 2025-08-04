@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="一个简单易用的随机分组工具，支持Excel文件导入，可以智能地将人员随机分成小组。适用于教育、培训、活动组织等场景。">
+    <meta name="keywords" content="随机分组,Excel,分组工具,教育工具,团队分组">
+    <meta name="author" content="Random Grouping Tool">
+    <title>🎲 随机分组工具 - 智能Excel分组助手</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎲</text></svg>">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="🎲 随机分组工具 - 智能Excel分组助手">
+    <meta property="og:description" content="一个简单易用的随机分组工具，支持Excel文件导入，可以智能地将人员随机分成小组。适用于教育、培训、活动组织等场景。">
+    <meta property="og:image" content="https://via.placeholder.com/1200x630/667eea/ffffff?text=🎲 随机分组工具">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:title" content="🎲 随机分组工具 - 智能Excel分组助手">
+    <meta property="twitter:description" content="一个简单易用的随机分组工具，支持Excel文件导入，可以智能地将人员随机分成小组。适用于教育、培训、活动组织等场景。">
+    
+    <!-- External libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js" integrity="sha512-r22gChDnGvBylk90+2e/ycr3RVrDi8DIOkIGNhJlKfuyQM4tIRAI062MaV8sfjQKYVGjOBaZBOA87z+IhZE9DA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎲 随机分组工具</h1>
+            <p>上传Excel表格，智能随机分组</p>
+        </div>
+        
+        <div class="content">
+            <div class="section">
+                <h3>📁 上传Excel文件</h3>
+                <div class="file-upload" onclick="document.getElementById('fileInput').click()" role="button" tabindex="0" aria-label="点击上传Excel文件">
+                    <div class="file-upload-icon">📄</div>
+                    <div class="file-upload-text">
+                        <strong>点击选择Excel文件或拖拽到此处</strong><br>
+                        支持格式：.xlsx, .xls<br>
+                        <small>表格格式：序号 | 姓名 | 性别 | 年龄</small>
+                    </div>
+                    <input type="file" id="fileInput" accept=".xlsx,.xls" onchange="handleFileUpload(event)" aria-describedby="fileInfo">
+                </div>
+                <div id="fileInfo" style="margin-top: 15px; display: none;">
+                    <div class="alert alert-success">
+                        <span id="fileName"></span> - <span id="fileSize"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3>⚙️ 分组设置</h3>
+                <div class="form-group">
+                    <div class="form-item">
+                        <label for="groupMode">分组方式</label>
+                        <select id="groupMode" onchange="toggleGroupMode()">
+                            <option value="byGroups">按组数分组</option>
+                            <option value="byMembers">按每组人数分组</option>
+                        </select>
+                    </div>
+                    <div class="form-item" id="groupsCountDiv">
+                        <label for="groupsCount">分成几组</label>
+                        <input type="number" id="groupsCount" min="1" value="2" placeholder="输入组数">
+                    </div>
+                    <div class="form-item" id="membersPerGroupDiv" style="display: none;">
+                        <label for="membersPerGroup">每组几人</label>
+                        <input type="number" id="membersPerGroup" min="1" value="3" placeholder="输入每组人数">
+                    </div>
+                    <div class="form-item">
+                        <button class="btn" onclick="generateGroups()" id="generateBtn" disabled aria-describedby="dataPreview">
+                            🎲 开始分组
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="dataPreview" style="display: none;" class="section">
+                <h3>👥 数据预览</h3>
+                <div class="stats" id="dataStats"></div>
+                <div id="membersList"></div>
+            </div>
+
+            <div id="results" style="display: none;" class="section">
+                <h3>📊 分组结果</h3>
+                <div style="margin-bottom: 20px;">
+                    <button class="btn" onclick="generateGroups()">🔄 重新分组</button>
+                    <button class="btn export-btn" onclick="exportResults()">📥 导出结果</button>
+                </div>
+                <div class="stats" id="resultStats"></div>
+                <div id="groupsContainer"></div>
+            </div>
+        </div>
+    </div>
+
+    <footer style="text-align: center; padding: 20px; color: #6c757d; font-size: 0.9em;">
+        <p>🎲 随机分组工具 | 让分组变得简单高效</p>
+        <p style="margin-top: 5px;">
+            <a href="https://github.com" target="_blank" rel="noopener noreferrer" style="color: #667eea; text-decoration: none;">GitHub</a> | 
+            <a href="#" onclick="window.scrollTo(0,0); return false;" style="color: #667eea; text-decoration: none;">返回顶部</a>
+        </p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
